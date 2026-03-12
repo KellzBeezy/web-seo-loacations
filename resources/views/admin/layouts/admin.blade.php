@@ -109,7 +109,7 @@
 
             <main class="flex-grow p-4 md:p-8 bg-gray-100">
                 <div class="max-w-7xl mx-auto">
-                    @if(session('success'))
+                    <!-- @if(session('success'))
                         <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 shadow-sm rounded-r">
                             {{ session('success') }}
                         </div>
@@ -119,7 +119,7 @@
                         <div class="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 shadow-sm rounded-r">
                             {{ session('error') }}
                         </div>
-                    @endif
+                    @endif -->
 
                     @yield('content')
                 </div>

@@ -26,6 +26,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/tenants', [SuperAdminController::class, 'manageTenants'])->name('admin.tenants');
         Route::get('/system-logs', [SuperAdminController::class, 'logs'])->name('admin.logs');
 
+        Route::post('/signed-up', [SuperAdminController::class, 'store'])->name('admin.tenants.store');
+
+        // New Routes
+        Route::put('/tenants/{id}', [SuperAdminController::class, 'update'])->name('admin.tenants.update');
+        Route::delete('/tenants/{id}', [SuperAdminController::class, 'destroy'])->name('admin.tenants.destroy');
+
         // Use the explicit logout route
         Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
     });
