@@ -18,7 +18,11 @@ class TenantDatabaseService
         Config::set('database.connections.dynamic.username', $tenant->db_username);
         Config::set('database.connections.dynamic.password', decrypt($tenant->db_password));
 
+        // dd(Config::get('database.connections.dynamic'));
+
         DB::purge('dynamic');
         DB::reconnect('dynamic');
+
+        DB::setDefaultConnection('dynamic');
     }
 }

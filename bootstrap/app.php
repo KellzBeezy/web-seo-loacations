@@ -14,6 +14,16 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'tenant' => SwitchTenantDatabase::class,
+            'super_admin' => \App\Http\Middleware\EnsureUserIsSuperAdmin::class,
+        ]);
+
+        // CRITICAL: Force the tenant middleware to run before authentication
+        $middleware->priority([
+            \App\Http\Middleware\SwitchTenantDatabase::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class, // This is 'auth'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Services\TenantDatabaseService;
+use Illuminate\Support\Facades\DB;
 
 class SwitchTenantDatabase
 {
@@ -16,6 +17,8 @@ class SwitchTenantDatabase
         $domain = $request->getHost();
 
         $this->tenantService->connectByDomain($domain);
+
+        // dd(DB::connection()->getDatabaseName());
 
         return $next($request);
     }

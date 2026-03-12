@@ -10,6 +10,7 @@ class AppTenant extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql';
     protected $table = 'app_tenants';
 
     protected $fillable = [
