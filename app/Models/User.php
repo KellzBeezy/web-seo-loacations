@@ -45,11 +45,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    public function manageTenants()
-    {
-        $tenants = AppTenant::with('owner')->latest()->paginate(10);
-
-        return view('admin.tenants.index', compact('tenants'));
-    }
 }
