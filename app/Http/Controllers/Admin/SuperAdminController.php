@@ -37,9 +37,13 @@ class SuperAdminController extends Controller
      */
     public function manageTenants()
     {
-        $tenants = AppTenant::with('owner')->latest()->paginate(10);
+        // $tenants = AppTenant::with('owner')->latest()->paginate(10);
+        $tenants = AppTenant::latest()->paginate(10);
 
-        return view('admin.tenants.index', compact('tenants'));
+        return view('admin.tenants.index', [
+            'tenants' => $tenants,
+            'user' => auth()->user()
+        ]);
     }
 
     /**
@@ -49,6 +53,6 @@ class SuperAdminController extends Controller
     {
         // This is a placeholder for log viewing logic
         // You could use a package like 'spatie/laravel-activitylog'
-        return view('admin.logs');
+        return view('admin.logs', ['user' => auth()->user()]);
     }
 }

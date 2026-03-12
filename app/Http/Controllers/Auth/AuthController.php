@@ -96,16 +96,25 @@ class AuthController extends Controller
      * Logout for all users
      */
 
-
     public function logout(Request $request)
     {
-        // Log out of all possible guards
+        // 1. Determine which login page to return to BEFORE clearing the session
+        // This checks if the current URL contains 'super-admin'
+        $isAdminRequest = $request->is('admin/*') || $request->is('admin');
+
+        // 2. Log out of specific guards
         Auth::guard('web')->logout();
         Auth::guard('tenant')->logout();
 
+        // 3. Destroy session and CSRF token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        // 4. Redirect based on where they logged out from
+        if ($isAdminRequest) {
+            return redirect()->route('admin.login');
+        }
+
+        return redirect()->route('login');
     }
 }

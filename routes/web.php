@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\SuperAdminController;
 |--------------------------------------------------------------------------
 | These routes handle the Landlord/Central system.
 */
-Route::prefix('super-admin')->group(function () {
+Route::prefix('admin')->group(function () {
 
     // Admin Guest Routes (Redirects to dashboard if already logged in)
     Route::middleware('guest:web')->group(function () {
