@@ -27,6 +27,9 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        // dd(config('auth.guards.tenant'));
+        // dd(Auth::guard('tenant')->attempt($credentials));
+
         // Explicitly use the 'tenant' guard
         if (Auth::guard('tenant')->attempt($credentials)) {
             $request->session()->regenerate();

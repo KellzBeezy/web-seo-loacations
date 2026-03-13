@@ -17,29 +17,41 @@
     </div>
 
     <div x-data="{ 
-                    openAdd: {{ $errors->any() ? 'true' : 'false' }}, 
-                    openEdit: false,
-                    openDelete: false,
-                    step: 1,
-                    selectedTenant: { id: '', name: '', domain: '' },
+                openAdd: {{ $errors->any() ? 'true' : 'false' }}, 
+                openEdit: false,
+                openDelete: false,
+                step: 1,
+                addTitle: 'Tenant Information',
+                selectedTenant: { id: '', name: '', domain: '' },
 
-                    initEdit(tenant) {
-                        this.selectedTenant = tenant;
-                        this.openEdit = true;
-                    },
-
-                    initDelete(tenant) {
-                        this.selectedTenant = tenant;
-                        this.openDelete = true;
-                    }
-                }">
+                nextStep() { 
+                    if(this.step < 2) { 
+                        this.step++; 
+                        this.addTitle = 'Owner Account'; 
+                    } 
+                },
+                prevStep() { 
+                    if(this.step > 1) { 
+                        this.step--; 
+                        this.addTitle = 'Tenant Information'; 
+                    } 
+                },
+                initEdit(tenant) {
+                    this.selectedTenant = tenant;
+                    this.openEdit = true;
+                },
+                initDelete(tenant) {
+                    this.selectedTenant = tenant;
+                    this.openDelete = true;
+                }
+            }">
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
                 <h2 class="text-3xl font-extrabold text-slate-900">Manage Tenants</h2>
                 <p class="text-slate-500 text-sm mt-1">Total of {{ $tenants->total() }} registered accounts.</p>
             </div>
-            <button @click="openAdd = true"
+            <button @click="openAdd = true; step = 1; addTitle = 'Tenant Information'"
                 class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center">
                 <i class="fa fa-plus mr-2 text-sm"></i> Add New Tenant
             </button>
@@ -108,17 +120,16 @@
                         <i class="fa fa-exclamation-triangle text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900">Delete <span x-text="selectedTenant.name"></span>?</h3>
-                    <p class="text-slate-500 mt-2 text-sm">This will permanently remove the tenant record. The database will
-                        remain intact unless manually deleted.</p>
+                    <p class="text-slate-500 mt-2 text-sm">This will permanently remove the tenant record. The database
+                        remains intact.</p>
                 </div>
                 <div class="mt-8 flex gap-3">
                     <button @click="openDelete = false"
-                        class="flex-1 px-4 py-3 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50">Cancel</button>
+                        class="flex-1 px-4 py-3 border border-slate-200 rounded-xl font-bold text-slate-600">Cancel</button>
                     <form :action="'/admin/tenants/' + selectedTenant.id" method="POST" class="flex-1">
-                        @csrf
-                        @method('DELETE')
+                        @csrf @method('DELETE')
                         <button type="submit"
-                            class="w-full px-4 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-200">Delete</button>
+                            class="w-full px-4 py-3 bg-red-600 text-white rounded-xl font-bold">Delete</button>
                     </form>
                 </div>
             </div>
@@ -133,26 +144,24 @@
                             class="fa fa-times"></i></button>
                 </div>
                 <form :action="'/admin/tenants/' + selectedTenant.id" method="POST" class="p-8 space-y-5">
-                    @csrf
-                    @method('PUT')
+                    @csrf @method('PUT')
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Property
                             Name</label>
                         <input type="text" name="name" x-model="selectedTenant.name"
-                            class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
+                            class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Domain</label>
-                        <input type="text" name="domain" x-model="selectedTenant.domain"
+                        <input type="text" name="domain" x-model="selectedTenant.domain" disabled
                             class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-400 outline-none">
                     </div>
-                    <button type="submit"
-                        class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition shadow-lg">Update
+                    <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg">Update
                         Tenant</button>
                 </form>
             </div>
         </div>
 
-        @include('admin.tenants.partials.add_modal') {{-- Extract your existing add modal here or keep it in file --}}
+        @include('admin.tenants.partials.add_modal')
     </div>
 @endsection

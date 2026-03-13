@@ -35,16 +35,11 @@ class TenantProvisioningService
 
     public function createTenant(array $data)
     {
-        $dbName = $data['db_name'] ?? 'tenant_' . Str::random(8);
+        $dbName = 'tenant_' . $data['db_name'] . Str::random(8) ?? $data['db_name'];
         $owner = null;
         $tenant = null;
 
-        // // --- PHASE 1: Central DB (No Transaction) ---
-        // $owner = User::create([
-        //     'name' => $data['owner_name'],
-        //     'email' => $data['owner_email'],
-        //     'password' => bcrypt($data['owner_password']),
-        // ]);
+        // dd(env('DB_PASSWORD'));
 
         $tenant = AppTenant::create([
             'name' => $data['name'],
@@ -52,7 +47,7 @@ class TenantProvisioningService
             'db_name' => $dbName,
             'db_host' => env('DB_HOST'),
             'db_username' => env('DB_USERNAME'),
-            'db_password' => encrypt(env('DB_PASSWORD')),
+            'db_password' => $data['db_password'] ?? env('DB_PASSWORD'),
         ]);
 
         // --- PHASE 2: Physical DB & Migrations ---
