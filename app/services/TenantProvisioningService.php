@@ -35,7 +35,7 @@ class TenantProvisioningService
 
     public function createTenant(array $data)
     {
-        $dbName = 'tenant_' . $data['db_name'] . Str::random(8) ?? $data['db_name'];
+        $dbName = 'tenant_' . Str::slug($data['name']) . '_' . Str::random(5);
         $owner = null;
         $tenant = null;
 
@@ -58,12 +58,20 @@ class TenantProvisioningService
 
             $this->runMigrations($tenant);
 
-            $owner = User::create([
+            $owner = User::on('dynamic')->create([
                 'name' => $data['owner_name'],
                 'tenant_id' => $tenant->id, // Assuming you have a tenant_id field in users table
                 'email' => $data['owner_email'],
                 'password' => bcrypt($data['owner_password']),
             ]);
+
+            // get admin role
+            $adminRole = \App\Models\Tenant\Role::on('dynamic')
+                ->where('slug', 'admin')
+                ->first();
+
+            // assign role
+            $owner->roles()->attach($adminRole->id);
 
             return $tenant;
 
@@ -75,7 +83,7 @@ class TenantProvisioningService
             if ($owner)
                 $owner->delete();
 
-            dd($e->getMessage());
+            // dd($e->getMessage());
             // Drop the half-baked database if it exists
             DB::statement("DROP DATABASE IF EXISTS `$dbName`");
 
@@ -97,6 +105,13 @@ class TenantProvisioningService
             $exitCode = \Artisan::call('migrate', [
                 '--database' => 'dynamic',
                 '--path' => 'database/migrations/tenant',
+                '--force' => true
+            ]);
+
+            // run tenant seeder
+            \Artisan::call('db:seed', [
+                '--class' => 'Database\\Seeders\\TenantRolePermissionSeeder',
+                '--database' => 'dynamic',
                 '--force' => true
             ]);
 

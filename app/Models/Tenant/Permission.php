@@ -2,14 +2,8 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\User;
-
-use Illuminate\Database\Eloquent\Model;
-
 class Permission extends TenantModel
 {
-
-
     protected $fillable = [
         'name',
         'slug',
@@ -23,11 +17,33 @@ class Permission extends TenantModel
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_permission');
+        return $this->belongsToMany(
+            Role::class,
+            'role_permission',
+            'permission_id',
+            'role_id'
+        );
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_permission');
+        return $this->belongsToMany(
+            User::class,
+            'user_permission',
+            'permission_id',
+            'user_id'
+        );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helper
+    |--------------------------------------------------------------------------
+    */
+
+    public static function findBySlug(string $slug)
+    {
+        return static::where('slug', $slug)->first();
+    }
+
 }

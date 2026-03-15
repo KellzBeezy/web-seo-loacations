@@ -37,14 +37,18 @@
                             class="{{ request()->routeIs('tenant.dashboard') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-150">
                             Dashboard
                         </a>
-                        <a href="#"
-                            class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-150">
-                            My Lease
-                        </a>
-                        <a href="#"
-                            class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-150">
-                            Payments
-                        </a>
+                        @if(auth()->user()->hasPermission('view_locations'))
+                            <a href="{{ route('locations.index') }}"
+                                class="{{ request()->routeIs('locations.index') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-150">
+                                Locations
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('view_users'))
+                            <a href="{{ route('users.index') }}"
+                                class="{{ request()->routeIs('users.index') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition duration-150">
+                                Users
+                            </a>
+                        @endif
                     </div>
                 </div>
 
@@ -79,14 +83,17 @@
                     class="{{ request()->routeIs('tenant.dashboard') ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
                     Dashboard
                 </a>
-                <a href="#"
-                    class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                    My Lease
+                <a href="{{ route('locations.index') }}"
+                    class="{{ request()->routeIs('locations.index') ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Locations
                 </a>
-                <a href="#"
-                    class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                    Payments
-                </a>
+                @if(auth()->user()->hasRole('admin'))
+                    <a href="{{ route('users.index') }}"
+                        class="{{ request()->routeIs('users.index') ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                        Users
+                    </a>
+                @endif
+
             </div>
             <div class="pt-4 pb-3 border-t border-gray-200 px-4">
                 <div class="flex items-center px-3">

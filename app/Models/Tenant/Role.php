@@ -2,8 +2,6 @@
 
 namespace App\Models\Tenant;
 
-use App\Models\Tenant\User;
-
 class Role extends TenantModel
 {
     protected $fillable = [
@@ -11,29 +9,30 @@ class Role extends TenantModel
         'slug',
     ];
 
-    /**
-     * Permissions attached to this role
-     */
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class);
+        return $this->belongsToMany(
+            Permission::class,
+            'permission_role',
+            'role_id',
+            'permission_id'
+        );
     }
 
-    /**
-     * Users assigned to this role
-     */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(
+            User::class,
+            'role_user',
+            'role_id',
+            'user_id'
+        );
     }
 
-    /**
-     * Check if role has a specific permission
-     */
-    public function hasPermission($permissionSlug)
+    public function hasPermission($slug)
     {
         return $this->permissions()
-            ->where('slug', $permissionSlug)
+            ->where('slug', $slug)
             ->exists();
     }
 }

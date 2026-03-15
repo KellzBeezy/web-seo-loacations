@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'tenant' => SwitchTenantDatabase::class,
             'super_admin' => \App\Http\Middleware\EnsureUserIsSuperAdmin::class,
+            'role' => \App\Http\Middleware\CheckRole::class,
+            'permission' => \App\Http\Middleware\CheckPermission::class,
         ]);
 
         // CRITICAL: Force the tenant middleware to run before authentication

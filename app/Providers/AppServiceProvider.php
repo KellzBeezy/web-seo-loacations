@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +24,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Force Laravel to use Tailwind for the ->links() output
         Paginator::useTailwind();
+
+        View::composer('errors::*', function ($view) {
+            $view->with('user', Auth::user());
+        });
     }
 }

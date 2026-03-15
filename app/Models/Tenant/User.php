@@ -13,16 +13,25 @@ class User extends Authenticatable
 
     protected $hidden = ['password'];
 
+
+    public function tenant()
+    {
+        // Explicitly point to the central connection and the Tenant model
+        return $this->belongsTo(\App\Models\AppTenant::class, 'tenant_id');
+    }
     public function roles()
     {
         return $this->belongsToMany(Role::class);
     }
 
-    public function hasPermission($permission)
+    public function hasRole($roleSlug)
     {
-        return $this->roles()
-            ->whereHas('permissions', function ($q) use ($permission) {
-                $q->where('name', $permission);
-            })->exists();
+        return $this->roles->contains('slug', $roleSlug);
+    }
+
+    public function hasPermission($permissionSlug)
+    {
+        // flatMap merges all permissions from all roles into one collection
+        return $this->roles->flatMap->permissions->contains('slug', $permissionSlug);
     }
 }
