@@ -21,7 +21,7 @@ class TenantRolePermissionSeeder extends Seeder
         $permissions = [
             ['name' => 'Create Location', 'slug' => 'create_location'],
             ['name' => 'View Location', 'slug' => 'view_location'],
-            ['name' => 'View Users', 'slug' => 'view-users'],
+            ['name' => 'View Users', 'slug' => 'view_users'],
             ['name' => 'Update Location', 'slug' => 'update_location'],
             ['name' => 'Delete Location', 'slug' => 'delete_location'],
             ['name' => 'View Locations', 'slug' => 'view_locations'],

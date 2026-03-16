@@ -9,7 +9,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        \App\Models\User::create([
+        \App\Models\Tenant\User::create([
             'tenant_id' => 1,
             'name' => 'Tenant1 Admin',
             'email' => 'admin@client1.com',

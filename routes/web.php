@@ -6,6 +6,9 @@ use App\Http\Controllers\Tenant\DashboardController;
 use App\Http\Controllers\Tenant\LocationController;
 use App\Http\Controllers\Tenant\UserController;
 use App\Http\Controllers\Admin\SuperAdminController;
+use App\Http\Controllers\Admin\ActivityController;
+use App\Models\AppTenant;
+use App\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +37,11 @@ Route::prefix('admin')->group(function () {
         Route::put('/tenants/{id}', [SuperAdminController::class, 'update'])->name('admin.tenants.update');
         Route::delete('/tenants/{id}', [SuperAdminController::class, 'destroy'])->name('admin.tenants.destroy');
 
+        // Page to view all logs
+        Route::get('/admin/activities', [ActivityController::class, 'index'])->name('admin.activities.index');
+
+        // Route to download logs as CSV
+        Route::get('/admin/activities/download', [ActivityController::class, 'download'])->name('admin.activities.download');
 
         // Use the explicit logout route
         Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
@@ -69,7 +77,11 @@ Route::middleware('tenant')->group(function () {
         Route::get('/locations', [LocationController::class, 'index'])->middleware('permission:view_locations')->name('locations.index');
 
         // Handle the form submission
-        Route::post('/locations', [LocationController::class, 'store'])->middleware('permission:add_location')->name('locations.store');
+        Route::post('/locations', [LocationController::class, 'bulkStore'])->middleware('permission:add_location')->name('locations.store');
+
+        Route::post('/locations/import', [LocationController::class, 'import'])->middleware('permission:add_location')->name('locations.import');
+
+        Route::get('/locations/export-template', [LocationController::class, 'exportTemplate'])->name('locations.template');
 
         Route::put('/locations/{location}', [LocationController::class, 'update'])->middleware('permission:update_location')->name('locations.update');
 

@@ -52,7 +52,7 @@
                     <span>Manage Tenants</span>
                 </a>
 
-                <a href="{{ route('admin.logs') }}"
+                <a href="{{ route('admin.activities.index') }}"
                     class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-400 hover:text-white">
                     <i class="fa fa-terminal w-6 text-center mr-2"></i>
                     <span>System Logs</span>

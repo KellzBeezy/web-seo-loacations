@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\AppTenant;
+use App\Models\Activity;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Services\TenantProvisioningService;
@@ -20,12 +21,14 @@ class SuperAdminController extends Controller
         $stats = [
             'total_tenants' => AppTenant::count(),
             'active_users' => User::count(),
-            'total_revenue' => 55.90,
+            'total_revenue' => 59.40,
             'pending_tickets' => 4,
         ];
 
         return view('admin.dashboard', [
             'user' => auth()->user(),
+            'tenants' => AppTenant::latest()->take(5)->get(),
+            'activities' => Activity::with('user')->latest()->take(7)->get(),
             'stats' => (object) $stats
         ]);
     }
