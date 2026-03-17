@@ -13,7 +13,7 @@ class TenantDatabaseService
         $tenant = AppTenant::where('domain', $domain)->firstOrFail();
 
         Config::set('database.connections.dynamic.host', $tenant->db_host);
-        Config::set('database.connections.dynamic.port', $tenant->db_port);
+        Config::set('database.connections.dynamic.port', env('DB_PORT') ?? 3306);
         Config::set('database.connections.dynamic.database', $tenant->db_name);
         Config::set('database.connections.dynamic.username', $tenant->db_username);
         Config::set('database.connections.dynamic.password', decrypt($tenant->db_password));

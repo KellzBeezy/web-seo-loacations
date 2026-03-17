@@ -131,7 +131,7 @@ class SuperAdminController extends Controller
                 'name' => $request->tenant_name,
                 'domain' => $request->domain . '.' . explode(':', $request->getHttpHost())[0],
                 'db_name' => $request->db_name,
-                'db_host' => '127.0.0.1',
+                'db_host' => env('DB_HOST') ?? '127.0.0.1',
                 'db_username' => env('DB_USERNAME'),
                 'db_password' => env('DB_PASSWORD'),
                 'owner_name' => $request->owner_name,
