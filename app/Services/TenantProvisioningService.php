@@ -97,6 +97,8 @@ class TenantProvisioningService
             Config::set('database.connections.dynamic.database', $tenant->db_name);
             Config::set('database.connections.dynamic.username', env('DB_USERNAME'));
             Config::set('database.connections.dynamic.password', env('DB_PASSWORD'));
+            Config::set('database.connections.dynamic.host', $tenant->db_host);
+            Config::set('database.connections.dynamic.port', env('DB_PORT') ?? 3306);
 
             DB::purge('dynamic');
             DB::reconnect('dynamic');
